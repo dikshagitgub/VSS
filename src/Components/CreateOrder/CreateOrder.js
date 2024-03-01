@@ -79,7 +79,7 @@ const CreateOrder = () => {
   });
 
   const [desc, setDesc] = useState({
-    thickness: "",
+    thick: "",
     length: "",
     width: "",
     pcs: "",
@@ -98,7 +98,7 @@ const CreateOrder = () => {
     coatingnum: parseInt(coating),
     temper: temper,
     guardfilm: guard,
-    thickness: parseInt(desc.thickness),
+    thick: parseInt(desc.thick),
     width: parseInt(desc.width),
     length: parseInt(desc.length),
     pcs: parseInt(desc.pcs),
@@ -150,6 +150,7 @@ const CreateOrder = () => {
       setGst(gst);
     });
   }, [rate]);
+
   const handleClick = async (e) => {
     e.preventDefault();
     await Axios.get(
@@ -164,11 +165,11 @@ const CreateOrder = () => {
     )
       .then((response) => {
         if (response.data.isAvailable === "True") {
-          inputs.products.push(product);
+          inputs.products.push(product);  
           setNewProduct(() => {
             setNewProduct(inputs.products);
           });
-          console.log(newProduct);
+          console.log("avaialble stocks", newProduct);
         } else {
           setIsNotAvailable(true);
           setTimeout(() => {
@@ -213,7 +214,7 @@ const CreateOrder = () => {
             setSuccessAlert(false);
           }, 8000);
         } else {
-          console.log(response);
+          console.log("Created order",response);
           setFailureAlert(true);
           setTimeout(() => {
             setFailureAlert(false);
@@ -233,33 +234,28 @@ const CreateOrder = () => {
     });
   };
 
-  const [thickness, setThickness] = useState();
+  const [thick, setThickness] = useState();
   const [width, setWidth] = useState("");
   const [length, setLength] = useState("");
   const [pcs, setPcs] = useState("");
   const [totalWeight, setTotalWeight] = useState();
 
   useEffect(() => {
-    const weight = thickness * width * length * pcs * 7.85;
+    const weight = length * thick * width * pcs * 2;
     setTotalWeight(weight);
-  }, [thickness, width, length, pcs]);
+  }, [thick, width, length, pcs]);
 
-  
-  
-  
-  
-  
   function multiplyBy() {
-    var thickness = document.getElementById("thicknes").value;
+    var thick = document.getElementById("thick").value;
     var width = document.getElementById("width").value;
     var length = document.getElementById("length").value;
     var pcs = document.getElementById("pcs").value;
     var result = document.getElementById("result");
     var totalWeight = document.getElementById("subfields");
-    var totalWeight = thickness * width * length * pcs * 7.85;
+    var totalWeight = thick * length * width * pcs * 2;
 
     result.innerHTML = totalWeight;
-    desc.weight(totalWeight);
+    setTotalWeight(totalWeight);
   }
   function myWeight() {
     document.getElementById("myResult").value = multiplyBy();
@@ -777,35 +773,50 @@ const CreateOrder = () => {
                           <Container className="insideInputs">
                             <Row>
                               <Col className="m-2">
-                                <Row>
-                                  <label for="thickness">Thickness</label>
+                                {/* <Row>
+                                  <label for="thick">thick</label>
                                   <input
-                                    id="thicknes"
+                                    id="thick"
                                     type="number"
-                                    name="thickness"
-                                    placeholder="Thickness"
+                                    name="thick"
+                                    placeholder="thick"
                                     className="custom_input"
                                     // onChange={handleDesc}
-                                    onChange={e=>setThickness(e.target.value)}
+                                    onChange={(e) =>
+                                      setThickness(e.target.value)
+                                    }
                                     onInput={multiplyBy}
                                     // value={
-                                    //   desc.thickness.length === 0
+                                    //   desc.thick.length === 0
                                     //     ? ""
-                                    //     : desc.thickness
+                                    //     : desc.thick
                                     // }
-                                    value={thickness}
+                                    value={thick}
                                     required
                                   />
-                                  {desc.thickness.length === 0 && (
+                                  {desc.thick.length === 0 && (
                                     <span style={{ color: "red" }}>
                                       *Required
                                     </span>
                                   )}
+                                </Row> */}
+                                <Row>
+                                  <label for="thick">Thickness</label>
+                                  <input
+                                    type="text"
+                                    className="custom_input"
+                                    id="thick"
+                                    placeholder="thickness"
+                                    onChange={(e) =>
+                                      setThickness(e.target.value)
+                                    }
+                                    value={thick}
+                                  ></input>
                                 </Row>
                               </Col>
 
                               <Col className="m-2">
-                                <Row>
+                                {/* <Row>
                                   <label for="width">Width</label>
                                   <input
                                     id="width"
@@ -815,7 +826,7 @@ const CreateOrder = () => {
                                     name="width"
                                     // onChange={handleDesc}
                                     // change here
-                                    onChange={e=>setWidth(e.target.value)}
+                                    onChange={(e) => setWidth(e.target.value)}
                                     onInput={multiplyBy}
                                     // value={desc.width || ""}
                                     value={width}
@@ -826,6 +837,17 @@ const CreateOrder = () => {
                                       *Required
                                     </span>
                                   )}
+                                </Row> */}
+                                <Row>
+                                  <label for="thick">Width</label>
+
+                                  <input
+                                     className="custom_input"
+                                    type="text"
+                                    placeholder="widh trhr"
+                                    value={width}
+                                    onChange={(e) => setWidth(e.target.value)}
+                                  ></input>
                                 </Row>
                               </Col>
                             </Row>
@@ -850,7 +872,9 @@ const CreateOrder = () => {
                                           //   //tttttttttttttttttttttttttttttttttt
                                           //   setLength(e.target.value)
                                           // }}
-                                          onChange={e=>setLength(e.target.value)}
+                                          onChange={(e) =>
+                                            setLength(e.target.value)
+                                          }
                                           value={length}
                                           required
                                         />
@@ -878,15 +902,12 @@ const CreateOrder = () => {
                                           type="number"
                                           placeholder="Pcs"
                                           name="pcs"
-                                          
                                           // value={singleOrder.order}
                                           value={pcs}
-                                          onChange={(e) =>setPcs(e.target.value)
+                                          onChange={
+                                            (e) => setPcs(e.target.value)
                                             // handleOrderChange(index, e)
-                                            
-                                            
                                           }
-                                        
                                           className="subfields"
                                           // onChange={handleDesc}
                                           required
@@ -941,10 +962,9 @@ const CreateOrder = () => {
                             </Row>
                             <Row>
                               <p id="weight">
-                              TotalWeight: <span id="result">{totalWeight}</span>
+                                TotalWeight:{" "}
+                                <span id="result">{totalWeight}</span>
                               </p>
-
-                             
                             </Row>
                           </Container>
                         </Container>
@@ -981,7 +1001,7 @@ const CreateOrder = () => {
                               <Row className="mt-3 ml-auto col-1">
                                 <button
                                   className="addButton"
-                                  onClick={handleClick}
+                                  // onClick={handleClick}
                                 >
                                   <i class="fas fa-plus-circle"></i>
                                 </button>
@@ -1000,30 +1020,30 @@ const CreateOrder = () => {
                       margin: "30px",
                     }}
                   >
-                    {newProduct?.length > 0 && (
-                      <button
-                        style={{
-                          border: "none",
-                          borderRadius: "5px",
-                          backgroundColor: "#98520c",
-                          color: "white",
-                          padding: "10px",
-                        }}
-                        type="submit"
-                        disable={product.length < 0 ? "true" : "false"}
-                      >
-                        {loading ? (
-                          <LoaderComp
-                            type={"TailSpin"}
-                            color={"white"}
-                            hidden={true}
-                            height={30}
-                          />
-                        ) : (
-                          "Submit"
-                        )}
-                      </button>
-                    )}
+                    {/* {newProduct?.length > 0 && ( */}
+                    <button
+                      style={{
+                        border: "none",
+                        borderRadius: "5px",
+                        backgroundColor: "#98520c",
+                        color: "white",
+                        padding: "10px",
+                      }}
+                      type="submit"
+                      disable={product.length < 0 ? "true" : "false"}
+                    >
+                      {loading ? (
+                        <LoaderComp
+                          type={"TailSpin"}
+                          color={"white"}
+                          hidden={true}
+                          height={30}
+                        />
+                      ) : (
+                        "Submit"
+                      )}
+                    </button>
+                    {/* )} */}
                   </div>
                 </form>
               </Container>
@@ -1138,12 +1158,12 @@ const CreateOrder = () => {
                         </Row>
                         <Row>
                           <Col>
-                            <p>length - {val.length}</p>
+                            <p>length - {length}</p>
                           </Col>
                         </Row>
                         <Row>
                           <Col>
-                            <p>width - {val.width}</p>
+                            <p>width - {width}</p>
                           </Col>
                         </Row>
                         <Row>

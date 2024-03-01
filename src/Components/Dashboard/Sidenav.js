@@ -65,7 +65,7 @@ const Sidenav = ({  match }) => {
           </div> */}
           <div>
             <Link className="nav_link" to={`${match}/billing`}>
-              <i class="fas fa-file-invoice"></i>
+              <i className="fas fa-file-invoice"></i>
             </Link>
             <p className="nav_text">Billing</p>
           </div>
